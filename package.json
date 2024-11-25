@@ -12,10 +12,15 @@
     "@google/generative-ai": "^0.2.0",
     "@hookform/resolvers": "^3.3.4",
     "@tabler/icons-react": "^3.22.0",
+    "date-fns": "^4.1.0",
+    "framer-motion": "^11.11.17",
+    "jspdf": "^2.5.2",
+    "jspdf-autotable": "^3.8.4",
     "next": "15.0.3",
     "react": "19.0.0-rc-66855b96-20241106",
     "react-dom": "19.0.0-rc-66855b96-20241106",
     "react-hook-form": "^7.53.2",
+    "tailwindcss-animate": "^1.0.7",
     "zod": "^3.23.8"
   },
   "devDependencies": {

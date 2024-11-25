@@ -51,7 +51,7 @@ export default function Layout({ children }: LayoutProps) {
             )}
             <button
               onClick={() => setCollapsed(!collapsed)}
-              className="p-1.5 rounded-lg hover:bg-[#97ef39]/10 text-[#97ef39]"
+              className="p-1.5 hover:bg-[#97ef39]/10 text-[#97ef39]"
             >
               {collapsed ? <IconChevronRight size={20} /> : <IconChevronLeft size={20} />}
             </button>
@@ -71,7 +71,7 @@ export default function Layout({ children }: LayoutProps) {
                     <Link
                       key={item.path}
                       href={item.path}
-                      className={`flex items-center px-4 py-2.5 mb-1 text-sm rounded-lg transition-colors ${
+                      className={`flex items-center px-4 py-2.5 mb-1 text-sm  transition-colors ${
                         pathname === item.path
                           ? 'bg-[#97ef39]/10 text-[#97ef39] dark:bg-[#97ef39]/20'
                           : 'text-gray-700 dark:text-gray-300 hover:bg-[#97ef39]/5 dark:hover:bg-[#97ef39]/10'

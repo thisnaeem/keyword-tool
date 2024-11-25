@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { getGeminiInstance } from '@/app/lib/gemini';
 import { useConfig } from '@/app/context/ConfigContext';
+import { PageHeader } from '@/app/components/PageHeader';
 
 interface Niche {
   category: string;
@@ -79,24 +80,24 @@ export default function NichesPage() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold mb-8">Trending Niches</h1>
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+      <PageHeader title="Trending Niches" />
+      <div className="bg-white dark:bg-gray-800 shadow-lg p-6">
         {error ? (
-          <div className="text-red-500 p-4 rounded-lg bg-red-50 dark:bg-red-900/30">
+          <div className="text-red-500 p-4  bg-red-50 dark:bg-red-900/30">
             {error}
           </div>
         ) : (
           <>
             {loading ? (
               <div className="flex justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+                <div className="animate-spin  h-8 w-8 border-b-2 border-primary" />
               </div>
             ) : (
               <div className="grid gap-6">
                 {niches.map((niche, index) => (
                   <div
                     key={index}
-                    className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg"
+                    className="bg-gray-50 dark:bg-gray-700 p-4 "
                   >
                     <h3 className="font-semibold text-xl text-primary">
                       {niche.category}
@@ -120,7 +121,7 @@ export default function NichesPage() {
             )}
             <button
               onClick={fetchNiches}
-              className="mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 transition-colors"
+              className="mt-4 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 transition-colors"
             >
               Refresh Niches
             </button>

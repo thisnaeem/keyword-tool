@@ -3,21 +3,29 @@
 import { useState, useEffect } from 'react';
 import { getGeminiInstance } from '@/app/lib/gemini';
 import { useConfig } from '@/app/context/ConfigContext';
+import { EventsFilter } from '@/app/components/EventsFilter';
+import { PageHeader } from '@/app/components/PageHeader';
+import { EventCard } from '@/app/components/EventCard';
+import { format } from 'date-fns';
 
 interface Event {
   name: string;
   date: string;
   description: string;
   daysUntil: number;
+  isPriority?: boolean;
 }
+
+type FilterPeriod = 'week' | 'month' | 'year';
 
 export default function EventsPage() {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [filterPeriod, setFilterPeriod] = useState<FilterPeriod>('month');
   const { apiKey } = useConfig();
 
-  const fetchEvents = async () => {
+  const fetchEvents = async (period: FilterPeriod) => {
     if (!apiKey) {
       setError('API key is required');
       return;
@@ -32,16 +40,15 @@ export default function EventsPage() {
 
       const model = genAI.getGenerativeModel({ model: "gemini-pro" });
       const today = new Date();
+      const formattedDate = format(today, 'yyyy-MM-dd');
       
-      const prompt = `Generate a JSON array of 5 upcoming world events, celebrations, or observances happening in the next 90 days from ${today.toISOString().split('T')[0]}. 
-      Include major holidays, cultural events, and industry events that microstock contributors should prepare content for.
-      Each object must have exactly these fields:
-      - name (string): event name
-      - date (string): event date in YYYY-MM-DD format
-      - description (string): brief description
-      
-      Sort by date ascending. Respond ONLY with the JSON array, no other text.
-      Example: [{"name": "Earth Day", "date": "2024-04-22", "description": "Annual environmental awareness day"}]`;
+      const periodDays = {
+        week: 7,
+        month: 30,
+        year: 365
+      };
+
+      const prompt = `Generate a JSON array of upcoming world events, celebrations, or observances happening in the next ${periodDays[period]} days from ${formattedDate}...`;
       
       const result = await model.generateContent(prompt);
       const response = await result.response;
@@ -67,9 +74,23 @@ export default function EventsPage() {
           name: String(event.name),
           date: event.date,
           description: String(event.description),
-          daysUntil
+          daysUntil,
+          isPriority: Boolean(event.isPriority)
         };
-      }).sort((a, b) => a.daysUntil - b.daysUntil);
+      })
+      .filter(event => {
+        switch (period) {
+          case 'week':
+            return event.daysUntil <= 7;
+          case 'month':
+            return event.daysUntil <= 30;
+          case 'year':
+            return event.daysUntil <= 365;
+          default:
+            return true;
+        }
+      })
+      .sort((a, b) => a.daysUntil - b.daysUntil);
       
       setEvents(validatedEvents);
     } catch (error) {
@@ -81,57 +102,63 @@ export default function EventsPage() {
 
   useEffect(() => {
     if (apiKey) {
-      fetchEvents();
+      fetchEvents(filterPeriod);
     }
-  }, [apiKey]);
+  }, [apiKey, filterPeriod]);
+
+  const priorityEvents = events.filter(event => event.isPriority);
+  const regularEvents = events.filter(event => !event.isPriority);
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold mb-8">Upcoming Events</h1>
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-        {error ? (
-          <div className="text-red-500 p-4 rounded-lg bg-red-50 dark:bg-red-900/30">
-            {error}
-          </div>
-        ) : loading ? (
-          <div className="flex justify-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
-          </div>
-        ) : (
-          <div className="grid gap-4">
-            {events.map((event, index) => (
-              <div
-                key={index}
-                className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg"
-              >
-                <div className="flex justify-between items-start">
-                  <h3 className="font-semibold text-lg">{event.name}</h3>
-                  <div className="text-right">
-                    <div className="text-blue-500 font-medium">
-                      {new Date(event.date).toLocaleDateString()}
-                    </div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">
-                      {event.daysUntil === 0 ? 'Today' : 
-                       event.daysUntil === 1 ? 'Tomorrow' : 
-                       `In ${event.daysUntil} days`}
-                    </div>
-                  </div>
-                </div>
-                <p className="text-gray-600 dark:text-gray-300 mt-2">
-                  {event.description}
-                </p>
-              </div>
-            ))}
+      <PageHeader title="Upcoming Events" />
+      
+      <EventsFilter 
+        activePeriod={filterPeriod} 
+        onPeriodChange={(period) => {
+          setFilterPeriod(period);
+          fetchEvents(period);
+        }} 
+      />
+
+      <div className="space-y-8">
+        {priorityEvents.length > 0 && (
+          <div className="bg-primary/5 dark:bg-primary/10  p-6 border border-primary/20">
+            <h2 className="text-xl font-semibold mb-4 text-primary">Priority Events</h2>
+            <div className="grid gap-4">
+              {priorityEvents.map((event, index) => (
+                <EventCard key={index} event={event} />
+              ))}
+            </div>
           </div>
         )}
-        <button
-          onClick={fetchEvents}
-          disabled={loading}
-          className="mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 transition-colors"
-        >
-          {loading ? 'Loading...' : 'Refresh Events'}
-        </button>
+
+        <div className="bg-white dark:bg-gray-800  shadow-lg p-6">
+          {error ? (
+            <div className="text-red-500 p-4  bg-red-50 dark:bg-red-900/30">
+              {error}
+            </div>
+          ) : loading ? (
+            <div className="flex justify-center">
+              <div className="animate-spin  h-8 w-8 border-b-2 border-primary" />
+            </div>
+          ) : (
+            <div className="grid gap-4">
+              {regularEvents.map((event, index) => (
+                <EventCard key={index} event={event} />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
+
+      <button
+        onClick={() => fetchEvents(filterPeriod)}
+        disabled={loading}
+        className="mt-4 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 transition-colors"
+      >
+        {loading ? 'Loading...' : 'Refresh Events'}
+      </button>
     </div>
   );
 } 
