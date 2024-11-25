@@ -10,7 +10,8 @@ import {
   IconSettings, 
   IconHome,
   IconChevronLeft,
-  IconChevronRight
+  IconChevronRight,
+  IconCode
 } from '@tabler/icons-react';
 
 interface LayoutProps {
@@ -27,9 +28,10 @@ const navItems = [
     ],
   },
   {
-    label: 'Settings',
+    label: 'About',
     items: [
       { name: 'API Configuration', path: '/settings/api', icon: IconSettings },
+      { name: 'Developer', path: '/about/developer', icon: IconCode },
     ],
   },
 ];

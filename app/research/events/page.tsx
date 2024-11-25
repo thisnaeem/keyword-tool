@@ -48,7 +48,24 @@ export default function EventsPage() {
         year: 365
       };
 
-      const prompt = `Generate a JSON array of upcoming world events, celebrations, or observances happening in the next ${periodDays[period]} days from ${formattedDate}...`;
+      const prompt = `Generate a JSON array of upcoming world events, celebrations, or observances happening in the next ${periodDays[period]} days from ${formattedDate}.
+
+Return ONLY a JSON array with this exact format:
+[{
+  "name": "Event Name",
+  "date": "YYYY-MM-DD",
+  "description": "Brief description of the event",
+  "isPriority": boolean
+}]
+
+Consider:
+- Major holidays
+- Cultural celebrations
+- International observances
+- Notable events
+- Industry conferences
+
+Return ONLY the JSON array, no additional text or formatting.`;
       
       const result = await model.generateContent(prompt);
       const response = await result.response;
@@ -60,37 +77,39 @@ export default function EventsPage() {
         .replace(/```json/g, '')
         .replace(/```/g, '')
         .replace(/[\r\n\t]/g, '')
+        .replace(/^JSON/, '')
         .trim();
 
-      const parsedEvents = JSON.parse(cleanedText);
-      if (!Array.isArray(parsedEvents)) throw new Error('Response is not an array');
+      let parsedEvents;
+      try {
+        parsedEvents = JSON.parse(cleanedText);
+      } catch (parseError) {
+        console.error('Raw response:', cleanedText, parseError);
+        throw new Error('Failed to parse AI response - invalid JSON format');
+      }
 
-      const validatedEvents = parsedEvents.map(event => {
-        const eventDate = new Date(event.date);
-        const timeDiff = eventDate.getTime() - today.getTime();
-        const daysUntil = Math.ceil(timeDiff / (1000 * 3600 * 24));
+      if (!Array.isArray(parsedEvents)) {
+        throw new Error('Response is not an array');
+      }
 
-        return {
-          name: String(event.name),
-          date: event.date,
-          description: String(event.description),
-          daysUntil,
-          isPriority: Boolean(event.isPriority)
-        };
-      })
-      .filter(event => {
-        switch (period) {
-          case 'week':
-            return event.daysUntil <= 7;
-          case 'month':
-            return event.daysUntil <= 30;
-          case 'year':
-            return event.daysUntil <= 365;
-          default:
-            return true;
-        }
-      })
-      .sort((a, b) => a.daysUntil - b.daysUntil);
+      const validatedEvents = parsedEvents
+        .map(event => {
+          const eventDate = new Date(event.date);
+          const timeDiff = eventDate.getTime() - today.getTime();
+          const daysUntil = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+          return {
+            name: String(event.name),
+            date: event.date,
+            description: String(event.description),
+            daysUntil,
+            isPriority: Boolean(event.isPriority)
+          };
+        })
+        .filter(event => {
+          return event.daysUntil >= 0 && event.daysUntil <= periodDays[period];
+        })
+        .sort((a, b) => a.daysUntil - b.daysUntil);
       
       setEvents(validatedEvents);
     } catch (error) {

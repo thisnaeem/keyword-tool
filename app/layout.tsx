@@ -20,8 +20,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`dark ${manrope.className}`}>
-      <body>
+    <html 
+      lang="en" 
+      className={manrope.className}
+      suppressHydrationWarning
+    >
+      <body className="dark">
         <ConfigProvider>
           <Layout>{children}</Layout>
         </ConfigProvider>

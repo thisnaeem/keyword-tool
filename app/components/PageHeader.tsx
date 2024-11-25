@@ -13,12 +13,13 @@ export function PageHeader({ title }: PageHeaderProps) {
         <HighlightedButton
           icon={IconBrandPatreon}
           text="Support on Patreon"
-          href="https://www.patreon.com/your_username"
+          href="https://www.patreon.com/thisnaeem"
         />
         <HighlightedButton
           icon={IconDownload}
           text="Download CSV Tool"
-          href="/download/csv-tool"
+          href="https://csvgen-xi.vercel.app/"
+         
         />
       </div>
     </div>
