@@ -3,6 +3,7 @@ import { ConfigProvider } from './context/ConfigContext';
 import Layout from './components/Layout';
 import { Manrope } from 'next/font/google';
 import "./globals.css";
+import GoogleAnalytics from "./components/GoogleAnalytics";
 
 const manrope = Manrope({ 
   subsets: ['latin'],
@@ -29,6 +30,7 @@ export default function RootLayout({
         <ConfigProvider>
           <Layout>{children}</Layout>
         </ConfigProvider>
+        <GoogleAnalytics />
       </body>
     </html>
   );
