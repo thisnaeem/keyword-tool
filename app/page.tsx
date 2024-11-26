@@ -48,13 +48,13 @@ export default function HomePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <SignInButton mode="modal">
-                <button className="inline-flex items-center px-6 py-3 text-white bg-[#97ef39] hover:bg-[#88d633] rounded-lg transition-all duration-200 shadow-md hover:shadow-lg">
+                <button className="inline-flex items-center px-6 py-3 text-white bg-[#97ef39] hover:bg-[#88d633]  transition-all duration-200 shadow-md hover:shadow-lg">
                   Get Started
                   <IconArrowRight className="ml-2 w-5 h-5" />
                 </button>
               </SignInButton>
               <SignInButton mode="modal">
-                <button className="inline-flex items-center px-6 py-3 text-gray-700 dark:text-white bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg transition-all duration-200">
+                <button className="inline-flex items-center px-6 py-3 text-gray-700 dark:text-white bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 transition-all duration-200">
                   <IconBrandGoogle className="mr-2 w-5 h-5 text-red-500" />
                   Continue with Google
                 </button>

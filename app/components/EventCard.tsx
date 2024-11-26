@@ -16,7 +16,7 @@ export function EventCard({ event }: EventCardProps) {
   const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(event.name)}`;
   
   return (
-    <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+    <div className="bg-gray-50 dark:bg-gray-700 p-4 ">
       <div className="flex justify-between items-start">
         <div>
           <h3 className="font-medium text-lg">

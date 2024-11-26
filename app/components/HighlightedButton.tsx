@@ -12,7 +12,7 @@ export function HighlightedButton({ icon: Icon, text, href }: HighlightedButtonP
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg 
+      className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white 
                 hover:bg-primary/90 transition-colors animate-pulse hover:animate-none"
     >
       <Icon className="w-5 h-5" />

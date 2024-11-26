@@ -12,7 +12,7 @@ export function EventsFilter({ activePeriod, onPeriodChange }: EventsFilterProps
     <div className="flex gap-2 mb-6">
       <button
         onClick={() => onPeriodChange('week')}
-        className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
+        className={`flex items-center px-4 py-2  transition-colors ${
           activePeriod === 'week'
             ? 'bg-primary text-white'
             : 'bg-gray-100 dark:bg-gray-700 hover:bg-primary/10'
@@ -23,7 +23,7 @@ export function EventsFilter({ activePeriod, onPeriodChange }: EventsFilterProps
       </button>
       <button
         onClick={() => onPeriodChange('month')}
-        className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
+        className={`flex items-center px-4 py-2  transition-colors ${
           activePeriod === 'month'
             ? 'bg-primary text-white'
             : 'bg-gray-100 dark:bg-gray-700 hover:bg-primary/10'
@@ -34,7 +34,7 @@ export function EventsFilter({ activePeriod, onPeriodChange }: EventsFilterProps
       </button>
       <button
         onClick={() => onPeriodChange('year')}
-        className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
+        className={`flex items-center px-4 py-2 transition-colors ${
           activePeriod === 'year'
             ? 'bg-primary text-white'
             : 'bg-gray-100 dark:bg-gray-700 hover:bg-primary/10'

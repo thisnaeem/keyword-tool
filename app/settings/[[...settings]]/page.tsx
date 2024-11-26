@@ -8,7 +8,7 @@ export default function SettingsPage() {
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Account Settings</h1>
       </div>
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
+      <div className="bg-white dark:bg-gray-800  shadow">
         <UserProfile 
           appearance={{
             elements: {

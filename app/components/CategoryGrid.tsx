@@ -67,7 +67,7 @@ export function CategoryGrid({
             <button
               key={cat.name}
               onClick={() => handleCategorySelect(cat.name)}
-              className={`flex items-center gap-2 p-3 rounded-lg transition-colors ${
+              className={`flex items-center gap-2 p-3  transition-colors ${
                 category === cat.name
                   ? 'bg-primary text-white'
                   : 'bg-gray-50 dark:bg-gray-700/50 hover:bg-primary/10'

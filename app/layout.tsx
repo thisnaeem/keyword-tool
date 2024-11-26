@@ -5,6 +5,7 @@ import { Manrope } from 'next/font/google';
 import "./globals.css";
 import GoogleAnalytics from "./components/GoogleAnalytics";
 import { ClerkProvider } from "@clerk/nextjs";
+import { TestimonialContainer } from './components/TestimonialContainer';
 
 const manrope = Manrope({ 
   subsets: ['latin'],
@@ -27,6 +28,7 @@ export default function RootLayout({
         <ClerkProvider>
           <ConfigProvider>
             <Layout>{children}</Layout>
+            <TestimonialContainer />
           </ConfigProvider>
           <GoogleAnalytics />
         </ClerkProvider>

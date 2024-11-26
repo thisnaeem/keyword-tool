@@ -8,9 +8,9 @@ export default function DeveloperPage() {
     <div className="max-w-4xl mx-auto">
       <PageHeader title="Developer Credits" />
       
-      <div className="bg-white dark:bg-gray-800 shadow-lg p-8 rounded-lg">
+      <div className="bg-white dark:bg-gray-800 shadow-lg p-8 ">
         <div className="text-center mb-8">
-          <div className="inline-block p-4 bg-primary/10 rounded-full mb-4">
+          <div className="inline-block p-4 bg-primary/10  mb-4">
             <IconCode className="w-12 h-12 text-primary" />
           </div>
           <h2 className="text-2xl font-bold mb-2">Naeem Anjum</h2>
@@ -30,14 +30,14 @@ export default function DeveloperPage() {
               href="https://naeemanjum.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-primary text-white  hover:bg-primary/90 transition-colors"
             >
               <IconWorld className="w-5 h-5" />
               Visit Website
             </a>
             <a
               href="mailto:me@naeemanjum.com"
-              className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
             >
               <IconMail className="w-5 h-5" />
               Contact
@@ -46,7 +46,7 @@ export default function DeveloperPage() {
               href="https://github.com/thisnaeem"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
             >
               <IconBrandGithub className="w-5 h-5" />
               GitHub
@@ -66,7 +66,7 @@ export default function DeveloperPage() {
               ].map((service, index) => (
                 <div 
                   key={index}
-                  className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg"
+                  className="p-4 bg-gray-50 dark:bg-gray-700/50 "
                 >
                   {service}
                 </div>
