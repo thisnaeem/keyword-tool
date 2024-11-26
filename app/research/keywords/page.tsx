@@ -6,11 +6,9 @@ import { PageHeader } from "@/app/components/PageHeader";
 import { useConfig } from "@/app/context/ConfigContext";
 import { getGeminiInstance } from "@/app/lib/gemini";
 import { exportToCSV, exportToPDF } from "@/app/utils/export";
-import {
-  IconPhoto,
-  IconTrendingUp
-} from "@tabler/icons-react";
+import { IconPhoto, IconTrendingUp } from "@tabler/icons-react";
 import { useRef, useState } from "react";
+
 
 interface KeywordSuggestion {
   keyword: string;
@@ -23,7 +21,6 @@ interface PlatformLink {
   url: string;
   icon: React.ElementType;
 }
-
 
 const platformLinks: PlatformLink[] = [
   {
@@ -55,13 +52,13 @@ export default function KeywordsPage() {
 
   const fetchKeywords = async (selectedCategory: string) => {
     if (!apiKey || !selectedCategory) return;
-    
+
     setLoading(true);
     setError(null);
     try {
       const genAI = getGeminiInstance();
       const model = genAI?.getGenerativeModel({ model: "gemini-pro" });
-      
+
       const prompt = `Generate a JSON array of 30 trending keywords for the category "${selectedCategory}" in microstock photography/illustration.
       For each keyword, analyze its potential across major marketplaces.
       Return as JSON array with format:
@@ -74,45 +71,46 @@ export default function KeywordsPage() {
       - Search volume on these platforms
       
       Return ONLY the JSON array, no other text.`;
-      
+
       const result = await model?.generateContent(prompt);
       const text = result?.response?.text();
-      
+
       if (!text) {
-        throw new Error('No response from AI');
+        throw new Error("No response from AI");
       }
 
       // Clean the response text
       const cleanedText = text
-        .replace(/```json/g, '')
-        .replace(/```/g, '')
-        .replace(/[\r\n\t]/g, '')
+        .replace(/```json/g, "")
+        .replace(/```/g, "")
+        .replace(/[\r\n\t]/g, "")
         .trim();
 
       try {
         const parsedKeywords = JSON.parse(cleanedText);
-        
+
         // Validate the structure
         if (!Array.isArray(parsedKeywords)) {
-          throw new Error('Response is not an array');
+          throw new Error("Response is not an array");
         }
 
         // Validate and sanitize each keyword object
-        const validatedKeywords = parsedKeywords.map(kw => ({
+        const validatedKeywords = parsedKeywords.map((kw) => ({
           keyword: String(kw.keyword),
           relevance: Number(kw.relevance),
-          marketplace: String(kw.marketplace)
+          marketplace: String(kw.marketplace),
         }));
 
         setKeywords(validatedKeywords as KeywordSuggestion[]);
       } catch (parseError) {
-        console.error('Raw AI response:', cleanedText, parseError);
-        throw new Error('Failed to parse AI response. Please try again.');
+        console.error("Raw AI response:", cleanedText, parseError);
+        throw new Error("Failed to parse AI response. Please try again.");
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error occurred";
       setError(`Error: ${errorMessage}`);
-      console.error('Error details:', error);
+      console.error("Error details:", error);
     } finally {
       setLoading(false);
     }
@@ -137,9 +135,9 @@ export default function KeywordsPage() {
     setCustomCategory(e.target.value);
   };
 
-  const handleExport = (type: 'csv' | 'pdf') => {
-    const filename = `keywords-${new Date().toISOString().split('T')[0]}`;
-    if (type === 'csv') {
+  const handleExport = (type: "csv" | "pdf") => {
+    const filename = `keywords-${new Date().toISOString().split("T")[0]}`;
+    if (type === "csv") {
       exportToCSV(keywords, filename);
     } else {
       exportToPDF(keywords, filename);
