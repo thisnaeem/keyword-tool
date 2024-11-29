@@ -15,6 +15,7 @@ import {
   IconChevronRight,
   IconCode,
   IconLogin,
+  IconBulb,
 } from "@tabler/icons-react";
 import UnauthorizedState from "./UnauthorizedState";
 import ProfileMenu from "./ProfileMenu";
@@ -35,6 +36,7 @@ const navItems = [
   {
     label: "About",
     items: [
+      { name: "Feedback", path: "/feedback", icon: IconBulb },
       { name: "API Configuration", path: "/settings/api", icon: IconSettings },
       { name: "Developer", path: "/about/developer", icon: IconCode },
     ],
@@ -48,7 +50,7 @@ export default function Layout({ children }: LayoutProps) {
 
 
   const isPublicRoute = (path: string) => {
-    return ["/", "/about/developer"].includes(path);
+    return ["/", "/about/developer", "/feedback"].includes(path);
   };
 
   // Show the layout with sidebar for all routes
@@ -64,7 +66,7 @@ export default function Layout({ children }: LayoutProps) {
             {!collapsed && (
               <Link href="/" className="flex items-center space-x-3">
                 <IconHome className="w-6 h-6 text-[#97ef39]" />
-                <span className="font-semibold">Content Planner</span>
+                <span className="font-semibold">Earnlyzer</span>
               </Link>
             )}
             <button

@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { IconX } from "@tabler/icons-react";
+import Image from 'next/image';
 
 interface TestimonialProps {
   name: string;
@@ -9,7 +10,13 @@ interface TestimonialProps {
   onClose: () => void;
 }
 
-export function TestimonialCard({ name, role, message, imageUrl, onClose }: TestimonialProps) {
+export function TestimonialCard({
+  name,
+  role,
+  message,
+  imageUrl,
+  onClose,
+}: TestimonialProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
@@ -23,12 +30,14 @@ export function TestimonialCard({ name, role, message, imageUrl, onClose }: Test
       >
         <IconX className="w-4 h-4" />
       </button>
-      
+
       <div className="flex items-start gap-4">
-        <img
+        <Image
           src={imageUrl}
           alt={name}
-          className="w-12 h-12 rounded-full object-cover"
+          width={48}
+          height={48}
+          className="rounded-full"
         />
         <div>
           <p className="text-gray-600 dark:text-gray-300 mb-2">{message}</p>
@@ -40,4 +49,4 @@ export function TestimonialCard({ name, role, message, imageUrl, onClose }: Test
       </div>
     </motion.div>
   );
-} 
+}

@@ -6,6 +6,8 @@ import "./globals.css";
 import GoogleAnalytics from "./components/GoogleAnalytics";
 import { ClerkProvider } from "@clerk/nextjs";
 import { TestimonialContainer } from './components/TestimonialContainer';
+import { Toaster } from 'react-hot-toast';
+import './styles/tour.css';
 
 const manrope = Manrope({ 
   subsets: ['latin'],
@@ -31,6 +33,7 @@ export default function RootLayout({
             <TestimonialContainer />
           </ConfigProvider>
           <GoogleAnalytics />
+          <Toaster position="bottom-right" />
         </ClerkProvider>
       </body>
     </html>
