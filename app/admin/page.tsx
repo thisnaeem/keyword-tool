@@ -2,36 +2,62 @@
 
 import { motion } from "framer-motion";
 import { IconUsers, IconPhoto, IconTrendingUp } from "@tabler/icons-react";
-import { PageHeader } from "@/components/PageHeader";
+import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 
-const stats = [
-  {
-    name: "Total Users",
-    value: "1,234",
-    change: "+12.3%",
-    icon: IconUsers,
-  },
-  {
-    name: "Content Items",
-    value: "12.5K",
-    change: "+15.1%",
-    icon: IconPhoto,
-  },
-  {
-    name: "Revenue",
-    value: "$12,345",
-    change: "+8.2%",
-    icon: IconTrendingUp,
-  },
-];
+interface DashboardStats {
+  totalUsers: number;
+  userGrowth: string;
+}
 
 export default function AdminDashboard() {
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await fetch("/api/admin/stats");
+        if (!response.ok) throw new Error("Failed to fetch stats");
+        const data = await response.json();
+        setStats(data);
+      } catch (error) {
+        toast.error("Failed to load dashboard stats");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  const dashboardStats = [
+    {
+      name: "Total Users",
+      value: loading ? "..." : stats?.totalUsers.toLocaleString(),
+      change: loading ? "..." : stats?.userGrowth,
+      icon: IconUsers,
+    },
+    {
+      name: "Content Items",
+      value: "12.5K",
+      change: "+15.1%",
+      icon: IconPhoto,
+    },
+    {
+      name: "Revenue",
+      value: "$12,345",
+      change: "+8.2%",
+      icon: IconTrendingUp,
+    },
+  ];
+
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">Admin Dashboard</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {stats.map((stat) => (
+        {dashboardStats.map((stat) => (
           <motion.div
             key={stat.name}
             initial={{ opacity: 0, y: 20 }}
