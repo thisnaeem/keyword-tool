@@ -62,7 +62,7 @@ export default function Layout({ children }: LayoutProps) {
   const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
   const { data: session, status } = useSession();
-
+  console.log(session);
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="flex h-screen">

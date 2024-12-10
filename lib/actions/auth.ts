@@ -2,50 +2,39 @@
 
 import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
-import { LoginInput, SignupInput } from "../validations/auth";
+import { LoginInput, SignupInput, signupSchema } from "../validations/auth";
+import { prisma } from "../prisma";
+import { hash } from "bcryptjs";
 
-export async function login(values: LoginInput) {
-  try {
-    await signIn("credentials", {
-      ...values,
-      redirectTo: "/dashboard",
-    });
-    return { success: true };
-  } catch (error) {
-    if (error instanceof AuthError) {
-      switch (error.type) {
-        case "CredentialsSignin":
-          return { error: "Invalid credentials." };
-        default:
-          return { error: "Something went wrong." };
-      }
-    }
-    throw error;
-  }
-}
 
 export async function signup(values: SignupInput) {
   try {
-    const response = await fetch("/api/auth/signup", {
-      method: "POST",
-      body: JSON.stringify(values),
-      headers: {
-        "Content-Type": "application/json",
+    // validate signup input
+    const validated = signupSchema.safeParse(values);
+    if (!validated.success) {
+      return { error: validated.error.message };
+    }
+
+    // check if user already exists
+    const user = await prisma.user.findUnique({
+      where: { email: values.email },
+    });
+    if (user) {
+      return { error: "User already exists." };
+    }
+
+    // create user
+    await prisma.user.create({
+      data: {
+        ...values,
+        password: await hash(values.password, 10),
       },
     });
 
-    if (!response.ok) {
-      const error = await response.json();
-      return { error: error.message };
-    }
-
-    await signIn("credentials", {
-      ...values,
-      redirectTo: "/dashboard",
-    });
 
     return { success: true };
   } catch (error) {
+    console.log(error);
     return { error: "Something went wrong." };
   }
 } 

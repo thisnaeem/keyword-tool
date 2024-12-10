@@ -13,19 +13,28 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Google,
     Credentials({
+      credentials: {
+        email: { label: "Email", type: "text", placeholder: "email" },
+        password: { label: "Password", type: "password" },
+      },
       async authorize(credentials) {
-        const validatedFields = loginSchema.safeParse(credentials);
+        const { email, password } = credentials;
+        const validatedFields = loginSchema.safeParse({
+          email,
+          password,
+        });
         if (!validatedFields.success) return null;
 
-        const { email, password } = validatedFields.data;
-
         const user = await prisma.user.findUnique({
-          where: { email },
+          where: { email: validatedFields.data.email },
         });
 
         if (!user || !user.password) return null;
 
-        const passwordsMatch = await compare(password, user.password);
+        const passwordsMatch = await compare(
+          validatedFields.data.password,
+          user.password
+        );
 
         if (!passwordsMatch) return null;
 
@@ -37,13 +46,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     strategy: "jwt",
   },
   callbacks: {
-    async jwt({ token, user, trigger }) {
+    async jwt({ token, user }) {
       if (user) {
         token.role = user.role;
         token.id = user.id;
-      }
-      if (trigger === "update") {
-        token.name = user.name;
       }
       return token;
     },

@@ -13,6 +13,8 @@ import {
 import Footer from "@/components/landing/Footer";
 import Link from "next/link";
 import FaqSection from "@/components/landing/FaqSection";
+import Hero from "@/components/landing/Hero";
+import Navbar from "@/components/landing/Navbar";
 
 const features = [
   {
@@ -56,49 +58,13 @@ const benefits = [
   },
 ];
 
-
-
 export default async function HomePage() {
   const session = await auth();
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Navigation */}
-      <nav className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <span className="text-xl font-bold text-gray-900 dark:text-white">
-                Microstock Planner
-              </span>
-            </div>
-            <div className="flex items-center">
-              <LoginButtons session={session} />
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      {/* Hero Section */}
-      <div className="relative overflow-hidden">
-        <div className="absolute inset-0 opacity-5"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-          <div className="text-center">
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-              Welcome to{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#97ef39] to-[#7bc62d]">
-                Microstock Content Planner
-              </span>
-            </h1>
-            <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
-              Your all-in-one platform for researching, planning, and optimizing
-              your microstock content strategy across multiple platforms.
-            </p>
-            <LoginButtons session={session} />
-          </div>
-        </div>
-      </div>
-
+      <Navbar session={session} />
+      <Hero session={session} />
       {/* Features Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
         <h2 className="text-3xl font-bold text-center mb-12 text-gray-900 dark:text-white">
