@@ -17,7 +17,6 @@ import {
   IconBulb,
   IconLayoutDashboard,
 } from "@tabler/icons-react";
-import UnauthorizedState from "./UnauthorizedState";
 import ProfileMenu from "./ProfileMenu";
 
 

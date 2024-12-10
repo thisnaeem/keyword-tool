@@ -1,7 +1,6 @@
 "use client";
 
 import { FeedbackForm } from "@/components/FeedbackForm";
-import toast from "react-hot-toast";
 
 export default function FeedbackPage() {
   return (
@@ -16,7 +15,7 @@ export default function FeedbackPage() {
             you&apos;ve found, features you&apos;d like to see, or general
             suggestions for improvement.
           </p>
-          <FeedbackForm onSubmit={() => {}} />
+          <FeedbackForm  />
         </div>
       </div>
     </div>

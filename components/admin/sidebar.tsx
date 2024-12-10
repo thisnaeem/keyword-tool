@@ -1,4 +1,4 @@
-import { IconDashboard, IconUsers, IconSettings, IconChartBar, IconChevronLeft } from "@tabler/icons-react";
+import { IconDashboard, IconUsers, IconSettings, IconChartBar, IconChevronLeft, IconMessage } from "@tabler/icons-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -16,6 +16,7 @@ const Sidebar = ({
     { title: "Users", icon: IconUsers, path: "/admin/users" },
     { title: "Analytics", icon: IconChartBar, path: "/admin/analytics" },
     { title: "Settings", icon: IconSettings, path: "/admin/settings" },
+    { title: "Feedback", icon: IconMessage, path: "/admin/feedbacks" },
   ];
 
   return (

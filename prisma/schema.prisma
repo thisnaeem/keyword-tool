@@ -22,8 +22,7 @@ model User {
   role          Role            @default(USER)
   accounts      Account[]
   sessions      Session[]
-  // Optional for WebAuthn support
-  Authenticator Authenticator[]
+  feedback    Feedback[]
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -68,18 +67,18 @@ model VerificationToken {
   @@id([identifier, token])
 }
  
-// Optional for WebAuthn support
-model Authenticator {
-  credentialID         String  @unique
-  userId               String
-  providerAccountId    String
-  credentialPublicKey  String
-  counter              Int
-  credentialDeviceType String
-  credentialBackedUp   Boolean
-  transports           String?
- 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
-  @@id([userId, credentialID])
+
+
+model Feedback {
+  id          String   @id @default(cuid())
+  type        String
+  title       String
+  description String?
+  status      String   @default("pending")
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
 }

@@ -4,8 +4,10 @@ import { NextResponse } from "next/server";
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }>  }
 ) {
+  const { userId } = await params;
+
   try {
     const session = await auth();
     
@@ -15,13 +17,13 @@ export async function DELETE(
     }
 
     // Don't allow admins to delete themselves
-    if (session.user.id === params.userId) {
+    if (session.user.id === userId) {
       return new NextResponse("Cannot delete your own account", { status: 400 });
     }
 
     await prisma.user.delete({
       where: {
-        id: params.userId,
+        id: userId,
       },
     });
 
@@ -34,8 +36,10 @@ export async function DELETE(
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
+  const { userId } = await params;
+
   try {
     const session = await auth();
     
@@ -53,13 +57,13 @@ export async function PATCH(
     }
 
     // Don't allow admins to demote themselves
-    if (session.user.id === params.userId) {
+    if (session.user.id === userId) {
       return new NextResponse("Cannot change your own role", { status: 400 });
     }
 
     const updatedUser = await prisma.user.update({
       where: {
-        id: params.userId,
+        id: userId,
       },
       data: {
         role,
