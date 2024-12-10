@@ -15,9 +15,11 @@ import {
   IconCode,
   IconLogin,
   IconBulb,
+  IconLayoutDashboard,
 } from "@tabler/icons-react";
 import UnauthorizedState from "./UnauthorizedState";
 import ProfileMenu from "./ProfileMenu";
+
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -63,11 +65,11 @@ const navItems = [
   },
 ];
 
+
 export default function Layout({ children }: LayoutProps) {
   const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
   const { data: session, status } = useSession();
-  console.log(session);
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="flex h-screen">
@@ -126,6 +128,25 @@ export default function Layout({ children }: LayoutProps) {
                 })}
               </div>
             ))}
+
+            {session?.user?.role === "ADMIN" && (
+              <div className="mb-6">
+                <h3 className="px-4 mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  Admin
+                </h3>
+
+                <Link
+                  href={"/admin"}
+                  className={`flex items-center px-4 py-2.5 mb-1 text-sm  transition-colors ${
+                    pathname === "/admin"
+                      ? "bg-[#97ef39]/10 text-[#97ef39] dark:bg-[#97ef39]/20"
+                      : "text-gray-700 dark:text-gray-300 hover:bg-[#97ef39]/5 dark:hover:bg-[#97ef39]/10"
+                  }`}
+                >
+                  <span className="ml-3">Admin Panel</span>
+                </Link>
+              </div>
+            )}
           </nav>
 
           <div className="mt-auto p-4 border-t border-gray-200 dark:border-gray-700">

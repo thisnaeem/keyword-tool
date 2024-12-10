@@ -38,6 +38,8 @@ export default function UsersPage() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState<string | null>(null);
   const [deletingMultiple, setDeletingMultiple] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const usersPerPage = 20;
 
   const fetchUsers = async () => {
     try {
@@ -187,6 +189,40 @@ export default function UsersPage() {
   const adminUsers = filteredUsers.filter(user => user.role === "ADMIN");
   const regularUsers = filteredUsers.filter(user => user.role === "USER");
 
+  const paginatedUsers = (users: User[]) => {
+    const startIndex = (currentPage - 1) * usersPerPage;
+    const endIndex = startIndex + usersPerPage;
+    return users.slice(startIndex, endIndex);
+  };
+
+  const Pagination = ({ totalItems }: { totalItems: number }) => {
+    const totalPages = Math.ceil(totalItems / usersPerPage);
+    
+    return (
+      <div className="flex justify-center items-center gap-2 mt-4">
+        <button
+          onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+          disabled={currentPage === 1}
+          className="px-3 py-1 rounded-md border border-gray-200 dark:border-gray-700
+            disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700"
+        >
+          Previous
+        </button>
+        <span className="text-sm text-gray-600 dark:text-gray-400">
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+          disabled={currentPage === totalPages}
+          className="px-3 py-1 rounded-md border border-gray-200 dark:border-gray-700
+            disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700"
+        >
+          Next
+        </button>
+      </div>
+    );
+  };
+
   const UserTable = ({ users, title }: { users: User[], title: string }) => (
     <div className="bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700">
       <div className="p-4 border-b border-gray-200 dark:border-gray-700">
@@ -226,7 +262,7 @@ export default function UsersPage() {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {(title === "Administrators" ? users : paginatedUsers(users)).map((user) => (
               <tr
                 key={user.id}
                 className="border-t border-gray-200 dark:border-gray-700"
@@ -258,6 +294,9 @@ export default function UsersPage() {
           </tbody>
         </table>
       </div>
+      {title !== "Administrators" && users.length > usersPerPage && (
+        <Pagination totalItems={users.length} />
+      )}
     </div>
   );
 

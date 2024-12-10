@@ -8,4 +8,4 @@ export async function hasRole(role: Role) {
 
 export async function isAdmin() {
   return hasRole("ADMIN");
-} 
+}
