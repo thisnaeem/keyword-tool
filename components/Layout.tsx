@@ -28,6 +28,11 @@ const navItems = [
     label: "Research",
     items: [
       {
+        name: "Dashboard",
+        path: "/dashboard",
+        icon: IconHome,
+      },
+      {
         name: "Keywords",
         path: "/dashboard/keywords",
         icon: IconSearch,
