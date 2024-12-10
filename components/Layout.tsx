@@ -50,7 +50,7 @@ const navItems = [
       { name: "Feedback", path: "/dashboard/feedback", icon: IconBulb },
       {
         name: "API Configuration",
-        path: "/dashboard/settings/api",
+        path: "/dashboard/settings",
         icon: IconSettings,
       },
       { name: "Developer", path: "/dashboard/developer", icon: IconCode },
