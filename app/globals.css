@@ -56,11 +56,3 @@
     @apply bg-background text-foreground;
   }
 }
-
-@layer components {
-  /* Your component styles here */
-}
-
-@layer utilities {
-  /* Your utility styles here */
-}

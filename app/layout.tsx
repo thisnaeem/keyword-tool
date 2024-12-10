@@ -1,17 +1,13 @@
 import type { Metadata } from "next";
-import { ConfigProvider } from './context/ConfigContext';
-import Layout from './components/Layout';
-import { Manrope } from 'next/font/google';
+import { Manrope } from "next/font/google";
 import "./globals.css";
-import GoogleAnalytics from "./components/GoogleAnalytics";
-import { ClerkProvider } from "@clerk/nextjs";
-import { TestimonialContainer } from './components/TestimonialContainer';
-import { Toaster } from 'react-hot-toast';
-import './styles/tour.css';
+import { Toaster } from "react-hot-toast";
+import "./styles/tour.css";
+import { SessionProvider } from "next-auth/react";
 
-const manrope = Manrope({ 
-  subsets: ['latin'],
-  display: 'swap',
+const manrope = Manrope({
+  subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -27,14 +23,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={manrope.className} suppressHydrationWarning>
       <body className="dark">
-        <ClerkProvider>
-          <ConfigProvider>
-            <Layout>{children}</Layout>
-            <TestimonialContainer />
-          </ConfigProvider>
-          <GoogleAnalytics />
+        <SessionProvider>
+          {children}
           <Toaster position="bottom-right" />
-        </ClerkProvider>
+        </SessionProvider>
       </body>
     </html>
   );
