@@ -13,7 +13,7 @@ const faqItems = [
   },
   {
     question: "Is there a free trial available?",
-    answer: "Yes, you can sign up and explore our basic features to see how the platform can benefit your content strategy. Premium features are available with a subscription."
+    answer: "Right Now, this is completely free. You can sign up and explore our basic features to see how the platform can benefit your content strategy. Premium features are available with a subscription."
   },
   {
     question: "Which stock platforms are supported?",
