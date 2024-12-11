@@ -42,7 +42,7 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pb-12">
           {/* Brand Section */}
           <div className="col-span-2 md:col-span-1">
-            <h3 className="text-xl font-bold text-white mb-4">Microstock Planner</h3>
+            <h3 className="text-xl font-bold text-white mb-4">Earnlyzer</h3>
             <p className="text-gray-400 mb-6">
               Empowering content creators with AI-powered insights for better stock content strategy.
             </p>
@@ -117,7 +117,7 @@ export default function Footer() {
         <div className="pt-8 border-t border-gray-800">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm">
-              © {new Date().getFullYear()} Microstock Planner. All rights reserved.
+              © {new Date().getFullYear()} Earnlyzer. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <Link 

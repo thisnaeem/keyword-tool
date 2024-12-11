@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import LoginButtons from "@/components/landing/LoginButtons";
+
 import {
   IconSearch,
   IconCalendar,
@@ -10,11 +10,9 @@ import {
   IconBrain,
   IconTrendingUp,
 } from "@tabler/icons-react";
-import Footer from "@/components/landing/Footer";
 import Link from "next/link";
-import FaqSection from "@/components/landing/FaqSection";
+import FaqSection from "@/components/landing/Faq";
 import Hero from "@/components/landing/Hero";
-import Navbar from "@/components/landing/Navbar";
 
 const features = [
   {
@@ -63,7 +61,7 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <Navbar session={session} />
+      
       <Hero session={session} />
       {/* Features Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
@@ -149,9 +147,6 @@ export default async function HomePage() {
           </div>
         </div>
       </div>
-
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }
