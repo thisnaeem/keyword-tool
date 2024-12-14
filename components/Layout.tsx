@@ -16,9 +16,11 @@ import {
   IconLogin,
   IconBulb,
   IconLayoutDashboard,
+  IconMessage,
+  IconTools,
+  IconShield,
 } from "@tabler/icons-react";
 import ProfileMenu from "./ProfileMenu";
-
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -37,6 +39,10 @@ const navItems = [
         name: "Keywords",
         path: "/dashboard/keywords",
         icon: IconSearch,
+        badge: {
+          text: "New",
+          color: "bg-primary text-xs px-2 py-0.5 font-medium ml-2"
+        }
       },
       {
         name: "Events",
@@ -53,22 +59,30 @@ const navItems = [
   {
     label: "About",
     items: [
-      { name: "Feedback", path: "/dashboard/feedback", icon: IconBulb },
+      { 
+        name: "Feedback", 
+        path: "/dashboard/feedback", 
+        icon: IconMessage 
+      },
       {
         name: "API Configuration",
         path: "/dashboard/settings",
-        icon: IconSettings,
+        icon: IconTools,
       },
-      { name: "Developer", path: "/dashboard/developer", icon: IconCode },
+      { 
+        name: "Developer", 
+        path: "/dashboard/developer", 
+        icon: IconCode 
+      },
     ],
   },
 ];
-
 
 export default function Layout({ children }: LayoutProps) {
   const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
   const { data: session, status } = useSession();
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="flex h-screen">
@@ -110,7 +124,7 @@ export default function Layout({ children }: LayoutProps) {
                     <Link
                       key={item.path}
                       href={item.path}
-                      className={`flex items-center px-4 py-2.5 mb-1 text-sm  transition-colors ${
+                      className={`flex items-center px-4 py-2.5 mb-1 text-sm transition-colors ${
                         pathname === item.path
                           ? "bg-[#97ef39]/10 text-[#97ef39] dark:bg-[#97ef39]/20"
                           : "text-gray-700 dark:text-gray-300 hover:bg-[#97ef39]/5 dark:hover:bg-[#97ef39]/10"
@@ -121,7 +135,16 @@ export default function Layout({ children }: LayoutProps) {
                           pathname === item.path ? "text-[#97ef39]" : ""
                         }`}
                       />
-                      {!collapsed && <span className="ml-3">{item.name}</span>}
+                      {!collapsed && (
+                        <>
+                          <span className="ml-3">{item.name}</span>
+                          {item.badge && (
+                            <span className={item.badge.color}>
+                              {item.badge.text}
+                            </span>
+                          )}
+                        </>
+                      )}
                     </Link>
                   );
                 })}
@@ -130,19 +153,21 @@ export default function Layout({ children }: LayoutProps) {
 
             {session?.user?.role === "ADMIN" && (
               <div className="mb-6">
-                <h3 className="px-4 mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Admin
-                </h3>
-
+                {!collapsed && (
+                  <h3 className="px-4 mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Admin
+                  </h3>
+                )}
                 <Link
-                  href={"/admin"}
-                  className={`flex items-center px-4 py-2.5 mb-1 text-sm  transition-colors ${
+                  href="/admin"
+                  className={`flex items-center px-4 py-2.5 mb-1 text-sm transition-colors ${
                     pathname === "/admin"
                       ? "bg-[#97ef39]/10 text-[#97ef39] dark:bg-[#97ef39]/20"
                       : "text-gray-700 dark:text-gray-300 hover:bg-[#97ef39]/5 dark:hover:bg-[#97ef39]/10"
                   }`}
                 >
-                  <span className="ml-3">Admin Panel</span>
+                  <IconShield className={`w-5 h-5 ${pathname === "/admin" ? "text-[#97ef39]" : ""}`} />
+                  {!collapsed && <span className="ml-3">Admin Panel</span>}
                 </Link>
               </div>
             )}
@@ -160,7 +185,7 @@ export default function Layout({ children }: LayoutProps) {
           </div>
         </aside>
 
-        <main className="flex-1 overflow-auto bg-gray-50 dark:bg-gray-900 p-6">
+        <main className="flex-1 overflow-auto bg-gray-50 dark:bg-gray-900">
           {children}
         </main>
       </div>

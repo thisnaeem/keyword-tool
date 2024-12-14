@@ -81,14 +81,24 @@ export function CategoryGrid({
       </div>
 
       <form onSubmit={handleCustomCategory} className="mt-4">
-        <input
-          ref={inputRef}
-          type="text"
-          value={customCategory}
-          onChange={handleInputChange}
-          placeholder="Or enter custom category..."
-          className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700/50 focus:ring-2 focus:ring-primary/50"
-        />
+        <div className="flex gap-2">
+          <div className="relative flex-1">
+            <input
+              ref={inputRef}
+              type="text"
+              value={customCategory}
+              onChange={handleInputChange}
+              placeholder="Or enter custom category..."
+              className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700/50 focus:ring-2 focus:ring-primary/50"
+            />
+          </div>
+          <button
+            type="submit"
+            className="px-4 py-2 bg-primary text-white hover:bg-primary/90 transition-colors"
+          >
+            Search
+          </button>
+        </div>
       </form>
     </div>
   );

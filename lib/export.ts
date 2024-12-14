@@ -7,10 +7,22 @@ declare module 'jspdf' {
   }
 }
 
+const getDifficultyLabel = (difficulty: number) => {
+  if (difficulty <= 3) return 'Easy';
+  if (difficulty <= 7) return 'Medium';
+  return 'Hard';
+};
+
+const getCompetitionLabel = (competition: number) => {
+  if (competition <= 3) return 'Low';
+  if (competition <= 7) return 'Medium';
+  return 'High';
+};
+
 export const exportToCSV = (keywords: any[], filename: string) => {
   const csvContent = "data:text/csv;charset=utf-8," 
-    + "Keyword,Relevance,Marketplace\n"
-    + keywords.map(k => `${k.keyword},${k.relevance},${k.marketplace}`).join("\n");
+    + "Keyword,Keyword Difficulty (KD),Competition Level\n"
+    + keywords.map(k => `${k.keyword},${getDifficultyLabel(k.difficulty)},${getCompetitionLabel(k.competition)}`).join("\n");
     
   const encodedUri = encodeURI(csvContent);
   const link = document.createElement("a");
@@ -24,8 +36,12 @@ export const exportToCSV = (keywords: any[], filename: string) => {
 export const exportToPDF = (keywords: any[], filename: string) => {
   const doc = new jsPDF();
   
-  const tableColumn = ["Keyword", "Relevance", "Marketplace"];
-  const tableRows = keywords.map(k => [k.keyword, k.relevance, k.marketplace]);
+  const tableColumn = ["Keyword", "Keyword Difficulty (KD)", "Competition Level"];
+  const tableRows = keywords.map(k => [
+    k.keyword, 
+    getDifficultyLabel(k.difficulty),
+    getCompetitionLabel(k.competition)
+  ]);
 
   doc.autoTable({
     head: [tableColumn],
