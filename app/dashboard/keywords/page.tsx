@@ -6,8 +6,37 @@ import { PageHeader } from "@/components/PageHeader";
 import { useConfig } from "@/context/ConfigContext";
 import { exportToCSV, exportToPDF } from "@/lib/export";
 import { getGeminiInstance } from "@/lib/gemini";
-import { IconPhoto, IconTrendingUp } from "@tabler/icons-react";
+import { 
+  IconPhoto, 
+  IconTrendingUp, 
+  IconSearch, 
+  IconArrowUpRight, 
+  IconChartBar,
+  IconBriefcase,
+  IconTree,
+  IconDevices,
+  IconHeartRateMonitor,
+  IconSchool,
+  IconPlane,
+  IconBallFootball,
+  IconCup,
+  IconPaw,
+  IconPalette,
+  IconMusic,
+  IconBuilding,
+  IconCalendarEvent,
+  IconCar,
+  IconMicroscope
+} from "@tabler/icons-react";
 import { useRef, useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { toast } from "react-hot-toast";
+
+const fadeInUp = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.5 }
+};
 
 interface KeywordSuggestion {
   keyword: string;
@@ -44,6 +73,100 @@ const platformLinks: PlatformLink[] = [
     url: "https://www.vecteezy.com/free-vector/",
     icon: IconPhoto,
   },
+];
+
+// Add popular categories data
+const popularCategories = [
+  {
+    name: "Business & Work",
+    icon: IconBriefcase,
+    color: "text-blue-400",
+    bgColor: "bg-blue-400/10"
+  },
+  {
+    name: "Nature & Landscapes",
+    icon: IconTree,
+    color: "text-green-400",
+    bgColor: "bg-green-400/10"
+  },
+  {
+    name: "Technology",
+    icon: IconDevices,
+    color: "text-purple-400",
+    bgColor: "bg-purple-400/10"
+  },
+  {
+    name: "Health & Fitness",
+    icon: IconHeartRateMonitor,
+    color: "text-red-400",
+    bgColor: "bg-red-400/10"
+  },
+  {
+    name: "Education",
+    icon: IconSchool,
+    color: "text-yellow-400",
+    bgColor: "bg-yellow-400/10"
+  },
+  {
+    name: "Travel & Tourism",
+    icon: IconPlane,
+    color: "text-cyan-400",
+    bgColor: "bg-cyan-400/10"
+  },
+  {
+    name: "Sports & Outdoors",
+    icon: IconBallFootball,
+    color: "text-orange-400",
+    bgColor: "bg-orange-400/10"
+  },
+  {
+    name: "Food & Drink",
+    icon: IconCup,
+    color: "text-pink-400",
+    bgColor: "bg-pink-400/10"
+  },
+  {
+    name: "Animals & Pets",
+    icon: IconPaw,
+    color: "text-amber-400",
+    bgColor: "bg-amber-400/10"
+  },
+  {
+    name: "Art & Design",
+    icon: IconPalette,
+    color: "text-indigo-400",
+    bgColor: "bg-indigo-400/10"
+  },
+  {
+    name: "Music & Entertainment",
+    icon: IconMusic,
+    color: "text-violet-400",
+    bgColor: "bg-violet-400/10"
+  },
+  {
+    name: "Architecture & Interiors",
+    icon: IconBuilding,
+    color: "text-slate-400",
+    bgColor: "bg-slate-400/10"
+  },
+  {
+    name: "Events & Activities",
+    icon: IconCalendarEvent,
+    color: "text-emerald-400",
+    bgColor: "bg-emerald-400/10"
+  },
+  {
+    name: "Vehicles & Transportation",
+    icon: IconCar,
+    color: "text-sky-400",
+    bgColor: "bg-sky-400/10"
+  },
+  {
+    name: "Science & Nature",
+    icon: IconMicroscope,
+    color: "text-teal-400",
+    bgColor: "bg-teal-400/10"
+  }
 ];
 
 // Function to get search volume ranges
@@ -164,7 +287,7 @@ export default function KeywordsPage() {
     setError(null);
     try {
       const genAI = getGeminiInstance();
-      const model = genAI?.getGenerativeModel({ model: "gemini-pro" });
+      const model = genAI?.getGenerativeModel({ model: "gemini-1.5-pro" });
 
       const prompt = `Generate 50 concise, high-value keywords for "${selectedCategory}" in stock photography/illustration. 
 
@@ -324,118 +447,212 @@ Return ONLY the JSON array.`;
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
-      {error && (
-        <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 ">
-          {error}
-        </div>
-      )}
-      <div className="bg-white dark:bg-gray-800 shadow-lg p-6">
-        <div className="relative">
-          <CategoryGrid
-            handleCategorySelect={handleCategorySelect}
-            category={category}
-            customCategory={customCategory}
-            handleCustomCategory={handleCustomCategory}
-            inputRef={inputRef}
-            isFocused={isFocused}
-            handleInputChange={handleInputChange}
-          />
-          <SearchSuggestions
-            suggestions={suggestions}
-            visible={showSuggestions}
-            onSelect={handleSuggestionSelect}
-            searchTerm={customCategory}
-          />
+    <div className="min-h-screen bg-gray-900 text-white py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="flex flex-col gap-1 mb-8">
+          <h1 className="text-2xl font-bold">Keyword Research</h1>
+          <p className="text-gray-400">Discover trending keywords and content opportunities</p>
         </div>
 
+        {/* Popular Categories Grid */}
+        <motion.div
+          initial="initial"
+          animate="animate"
+          variants={fadeInUp}
+          className="rounded-2xl bg-gray-800/50 border border-white/5 p-6 mb-8"
+        >
+          <div className="mb-6">
+            <h2 className="text-xl font-semibold">Select Category</h2>
+            <p className="text-gray-400 mt-1">Choose a category to find relevant keywords</p>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {popularCategories.map((cat) => (
+              <button
+                key={cat.name}
+                onClick={() => handleCategorySelect(cat.name)}
+                className={`p-4 rounded-xl border border-white/5 hover:border-white/10 transition-all duration-200 ${cat.bgColor} group`}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-black/20">
+                    <cat.icon className={`w-5 h-5 ${cat.color}`} />
+                  </div>
+                  <span className="text-sm font-medium text-gray-200 group-hover:text-white">
+                    {cat.name}
+                  </span>
+                </div>
+              </button>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Keyword Discovery Section */}
+        <motion.div
+          initial="initial"
+          animate="animate"
+          variants={fadeInUp}
+          className="rounded-2xl bg-gray-800/50 border border-white/5 p-6 mb-8"
+        >
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex-1">
+              <h2 className="text-xl font-semibold">Custom Search</h2>
+              <p className="text-gray-400">Or enter your own category</p>
+            </div>
+            <div className="relative w-full md:w-96">
+              <form onSubmit={handleCustomCategory} className="relative">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={customCategory}
+                  onChange={handleInputChange}
+                  placeholder="Enter a category or topic..."
+                  className="w-full px-4 py-2 bg-gray-900 border border-white/10 rounded-lg focus:outline-none focus:border-emerald-500/50 text-white placeholder-gray-500"
+                />
+                <button
+                  type="submit"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-emerald-500/20 rounded-lg hover:bg-emerald-500/30 transition-colors"
+                >
+                  <IconSearch className="w-5 h-5 text-emerald-400" />
+                </button>
+              </form>
+              <SearchSuggestions
+                suggestions={suggestions}
+                visible={showSuggestions}
+                onSelect={handleSuggestionSelect}
+                searchTerm={customCategory}
+              />
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Results Section */}
         {loading ? (
-          <div className="flex flex-col items-center justify-center p-12 bg-white dark:bg-gray-800 shadow-lg space-y-4">
+          <motion.div
+            initial="initial"
+            animate="animate"
+            variants={fadeInUp}
+            className="flex flex-col items-center justify-center p-12 space-y-4"
+          >
             <div className="relative">
-              <div className="w-16 h-16 border-4 border-gray-700 border-t-primary rounded-full animate-spin" />
+              <div className="w-16 h-16 border-4 border-gray-700 border-t-emerald-500 rounded-full animate-spin" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <IconTrendingUp className="w-6 h-6 text-primary animate-pulse" />
+                <IconSearch className="w-6 h-6 text-emerald-400 animate-pulse" />
               </div>
             </div>
             <div className="flex flex-col items-center space-y-2">
-              <h3 className="text-lg font-medium text-gray-200">Researching Keywords</h3>
+              <h3 className="text-lg font-medium text-gray-200">Analyzing Keywords</h3>
               <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:-0.3s]" />
-                <div className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:-0.15s]" />
-                <div className="w-2 h-2 bg-primary rounded-full animate-bounce" />
+                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-bounce [animation-delay:-0.3s]" />
+                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-bounce [animation-delay:-0.15s]" />
+                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-bounce" />
               </div>
-              <p className="text-sm text-gray-400 text-center max-w-sm">
-                Analyzing search volumes and competition across platforms
-              </p>
             </div>
-          </div>
-        ) : (
-          keywords.length > 0 && (
-            <div className="bg-white dark:bg-gray-800 shadow-lg p-6">
-              <div className="flex justify-between items-center mb-4">
-                <div>
-                  <h2 className="text-xl font-semibold">
-                    Trending Keywords for {category}
-                  </h2>
-                  <p className="text-sm text-gray-400 mt-1">
-                    Found {keywords.length} keywords
-                  </p>
-                </div>
-                <ExportButtons onExport={handleExport} count={keywords.length} />
+          </motion.div>
+        ) : error ? (
+          <motion.div
+            initial="initial"
+            animate="animate"
+            variants={fadeInUp}
+            className="rounded-2xl bg-red-500/10 border border-red-500/20 p-6 text-center"
+          >
+            <IconSearch className="w-8 h-8 text-red-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-red-400 mb-2">Error</h3>
+            <p className="text-gray-400">{error}</p>
+          </motion.div>
+        ) : keywords.length > 0 ? (
+          <motion.div
+            initial="initial"
+            animate="animate"
+            variants={fadeInUp}
+            className="rounded-2xl bg-gray-800/50 border border-white/5 p-6"
+          >
+            <div className="flex justify-between items-center mb-6">
+              <div>
+                <h2 className="text-xl font-semibold text-white">
+                  Keywords for &quot;{category}&quot;
+                </h2>
+                <p className="text-sm text-gray-400 mt-1">
+                  Found {keywords.length} relevant keywords
+                </p>
               </div>
-              <div className="mt-8">
-                <div className="border border-gray-700 rounded-lg overflow-hidden">
-                  {/* Table Header */}
-                  <div className="grid grid-cols-[2fr,200px,280px] p-4 bg-gray-900 border-b border-gray-700">
-                    <div className="text-base text-gray-400">Keyword</div>
-                    <div className="text-base text-gray-400 text-center">KD (Keyword Difficulty)</div>
-                    <div className="text-base text-gray-400 text-center">Search On</div>
-                  </div>
+              <ExportButtons onExport={handleExport} count={keywords.length} />
+            </div>
 
-                  {/* Table Body */}
-                  {keywords.map((kw, index) => (
-                    <div
-                      key={index}
-                      className="grid grid-cols-[2fr,200px,280px] p-4 border-b border-gray-700 items-center hover:bg-gray-800/50"
-                    >
-                      <div>
-                        <h3 
-                          className="text-lg text-gray-200 hover:text-primary cursor-pointer flex items-center gap-2 group"
-                          onClick={() => handleKeywordClick(kw.keyword)}
-                        >
-                          {getHighlightedText(kw.keyword, category)}
-                          <IconTrendingUp className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity text-primary" />
-                        </h3>
-                      </div>
+            <div className="space-y-4">
+              {keywords.map((kw, index) => (
+                <motion.div
+                  key={index}
+                  initial="initial"
+                  animate="animate"
+                  transition={{ delay: index * 0.1 }}
+                  variants={fadeInUp}
+                  className="bg-gray-800/50 rounded-xl overflow-hidden border border-white/5 group hover:border-emerald-500/20 p-4"
+                >
+                  <div className="flex flex-col md:flex-row gap-4 items-center">
+                    <div className="flex-1">
+                      <h3 
+                        className="text-lg text-gray-200 hover:text-emerald-400 cursor-pointer flex items-center gap-2 group"
+                        onClick={() => handleKeywordClick(kw.keyword)}
+                      >
+                        {getHighlightedText(kw.keyword, category)}
+                        <IconTrendingUp className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity text-emerald-400" />
+                      </h3>
+                    </div>
 
-                      <div className="flex justify-center">
-                        <span className={`px-4 py-1 min-w-[100px] text-center rounded-md text-sm font-medium ${getDifficultyLabel(kw.difficulty).color}`}>
-                          {getDifficultyLabel(kw.difficulty).label}
-                        </span>
-                      </div>
+                    <div className="flex items-center gap-4">
+                      <span className={`px-4 py-1 rounded-md text-sm font-medium ${getDifficultyLabel(kw.difficulty).color}`}>
+                        {getDifficultyLabel(kw.difficulty).label}
+                      </span>
 
-                      <div className="flex justify-between w-full max-w-[280px] mx-auto">
+                      <div className="flex gap-2">
                         {platformLinks.map((platform) => (
                           <a
                             key={platform.name}
                             href={`${platform.url}${encodeURIComponent(kw.keyword)}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex flex-col items-center"
+                            className="group/platform"
+                            title={platform.name}
                           >
-                            <div className="w-10 h-10 flex items-center justify-center bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors duration-200">
-                              <platform.icon className="w-5 h-5 text-gray-400" />
+                            <div className="w-8 h-8 flex items-center justify-center bg-gray-900 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                              <platform.icon className="w-4 h-4 text-gray-400 group-hover/platform:text-emerald-400" />
                             </div>
-                            <span className="text-xs text-gray-400 mt-1">{platform.name}</span>
                           </a>
                         ))}
                       </div>
                     </div>
-                  ))}
-                </div>
-              </div>
+                  </div>
+                </motion.div>
+              ))}
             </div>
-          )
+          </motion.div>
+        ) : category ? (
+          <motion.div
+            initial="initial"
+            animate="animate"
+            variants={fadeInUp}
+            className="rounded-2xl bg-gray-800/50 border border-white/5 p-12 text-center"
+          >
+            <IconSearch className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-200 mb-2">No Keywords Found</h3>
+            <p className="text-gray-400">
+              Try searching for a different category or topic
+            </p>
+          </motion.div>
+        ) : (
+          <motion.div
+            initial="initial"
+            animate="animate"
+            variants={fadeInUp}
+            className="rounded-2xl bg-gray-800/50 border border-white/5 p-12 text-center"
+          >
+            <IconSearch className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-200 mb-2">Ready to Discover</h3>
+            <p className="text-gray-400">
+              Enter a category or topic to find relevant keywords
+            </p>
+          </motion.div>
         )}
       </div>
     </div>

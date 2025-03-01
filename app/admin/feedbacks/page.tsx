@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { toast } from "react-hot-toast";
 import { PageHeader } from "@/components/PageHeader";
 
@@ -25,7 +25,7 @@ export default function AdminFeedbackPage() {
   const [totalPages, setTotalPages] = useState(0);
   const itemsPerPage = 10;
 
-  const fetchFeedback = async () => {
+  const fetchFeedback = useCallback(async () => {
     try {
       const response = await fetch(`/api/admin/feedback?page=${currentPage}&limit=${itemsPerPage}`);
       if (!response.ok) throw new Error('Failed to fetch feedback');
@@ -37,11 +37,11 @@ export default function AdminFeedbackPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentPage]);
 
   useEffect(() => {
     fetchFeedback();
-  }, [currentPage]);
+  }, [currentPage, fetchFeedback]);
 
   const handleStatusChange = async (feedbackId: string, newStatus: string) => {
     try {
