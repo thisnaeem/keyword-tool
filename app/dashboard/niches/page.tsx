@@ -66,7 +66,7 @@ export default function NichesPage() {
       const genAI = getGeminiInstance();
       if (!genAI) throw new Error("Gemini AI not initialized");
 
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
       const prompt = `Generate a JSON array of 5 trending microstock content niches. Each object should have exactly these fields:
       - category (string): the niche category name

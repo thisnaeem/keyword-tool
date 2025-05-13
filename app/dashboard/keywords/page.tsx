@@ -287,7 +287,7 @@ export default function KeywordsPage() {
     setError(null);
     try {
       const genAI = getGeminiInstance();
-      const model = genAI?.getGenerativeModel({ model: "gemini-1.5-pro" });
+      const model = genAI?.getGenerativeModel({ model: "gemini-2.0-flash" });
 
       const prompt = `Generate 50 concise, high-value keywords for "${selectedCategory}" in stock photography/illustration. 
 
